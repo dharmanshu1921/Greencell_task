@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NueGo Voltage Analysis - Results</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #60a5fa;
+      --secondary-color: #10b981;
+      --accent-color: #f59e0b;
+      --light-bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --dark-text: #1f2937;
+      --light-text: #6b7280;
+      --border-radius: 16px;
+      --shadow-light: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-medium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #4f46e5, #2563eb);
+      color: white;
+      padding: 4rem 0;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      border-radius: 0 0 40px 40px;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0NDAgOTAwIiBmaWxsPSJub25lIj48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xIDAuNUg2MDBMNDAwIDI1MEgxQzEgMjUwIDEgMC41IDEgMC41WiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTQ0MSA5MDBINDAwTDg1MCA2NTBIMTQ0MUMxNDQxIDY1MCAxNDQxIDkwMCAxNDQxIDkwMFoiIGZpbGw9IndoaXRlIi8+PC9nPjwvc3ZnPg==') no-repeat;
+      background-size: cover;
+      opacity: 0.1;
+      z-index: 0;
+    }
+    
+    header h1 {
+      position: relative;
+      z-index: 2;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    header p {
+      position: relative;
+      z-index: 2;
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+    
+    .content-section {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      box-shadow: var(--shadow-light);
+      transition: var(--transition);
+    }
+    
+    .content-section:hover {
+      box-shadow: var(--shadow-medium);
+    }
+    
+    .section-title {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      width: 60px;
+      background: var(--primary-light);
+      border-radius: 3px;
+    }
+    
+    .btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      margin: 1rem 1rem 1rem 0;
+    }
+    
+    .btn i {
+      margin-right: 10px;
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-back {
+      background-color: #64748b;
+    }
+    
+    .btn-back:hover {
+      background-color: #475569;
+    }
+    
+    /* Enhanced Summary Table Styles */
+    .summary-table-container {
+      margin-bottom: 2.5rem;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+    }
+    
+    .summary-table th,
+    .summary-table td {
+      padding: 1rem 1.5rem;
+      text-align: left;
+    }
+    
+    .summary-table th {
+      background-color: #e0f2fe;
+      font-weight: 600;
+      color: var(--dark-text);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    .summary-table tr:nth-child(even) {
+      background-color: #f0f9ff;
+    }
+    
+    .summary-table tr:hover {
+      background-color: #e0f2fe;
+    }
+    
+    /* Detailed Tables Styles */
+    .detailed-tables {
+      margin-top: 3rem;
+    }
+    
+    .detailed-tables table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .detailed-tables th,
+    .detailed-tables td {
+      padding: 1rem 1.5rem;
+      text-align: left;
+    }
+    
+    .detailed-tables th {
+      background-color: #e0f2fe;
+      font-weight: 600;
+      color: var(--dark-text);
+    }
+    
+    .detailed-tables tr:nth-child(even) {
+      background-color: #f0f9ff;
+    }
+    
+    .detailed-tables tr:hover {
+      background-color: #e0f2fe;
+    }
+    
+    /* Plot container styles */
+    .plot-container {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      overflow: auto;
+      box-shadow: var(--shadow-light);
+      margin-bottom: 2.5rem;
+      padding: 1rem;
+    }
+    
+    .plot-container h4 {
+      padding: 1.5rem 1.5rem 0.5rem;
+      font-size: 1.4rem;
+      color: var(--dark-text);
+      font-weight: 600;
+    }
+    
+    iframe {
+      border: none;
+      display: block;
+      width: 100%;
+    }
+    
+    .download-section {
+      margin: 1.5rem 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 2.5rem 0;
+      margin-top: 4rem;
+      color: var(--light-text);
+      background: var(--card-bg);
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    footer p:first-child {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 1rem;
+      }
+      
+      header {
+        padding: 3rem 1rem;
+        border-radius: 0 0 30px 30px;
+      }
+      
+      header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .content-section {
+        padding: 1.5rem;
+      }
+      
+      .btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+      }
+      
+      .summary-table th,
+      .summary-table td,
+      .detailed-tables th,
+      .detailed-tables td {
+        padding: 0.75rem 1rem;
+      }
+      
+      .plot-container h4 {
+        padding: 1rem 1rem 0.5rem;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-bolt"></i> NueGo Voltage Analysis</h1>
+    <p>Advanced analysis of voltage patterns and anomalies across the fleet</p>
+  </header>
+
+  <div class="container">
+    <div class="content-section">
+      <h2 class="section-title">Voltage Trends Overview</h2>
+
+      <!-- Main Plot Container -->
+      <div class="plot-container">
+        <div id="main-plot" style="width:100%;height:500px;"></div>
+      </div>
+
+      <!-- Download Buttons for Main CSV and Plot PNG -->
+      <div class="download-section">
+        <a href="{{ url_for('download_file', filename=csv_file) }}" class="btn" download>
+          <i class="fas fa-file-csv"></i> Download CSV Data
+        </a>
+        <button class="btn" onclick="downloadMainPlotPNG()">
+          <i class="fas fa-image"></i> Download Main Plot as PNG
+        </button>
+      </div>
+
+      <!-- Summary Table -->
+      <h3 class="section-title">Summary Statistics</h3>
+      <div class="summary-table-container">
+        <div style="max-height: 600px; overflow-y: auto;">
+          {{ summary_table|safe }}
+        </div>
+      </div>
+
+      <!-- Individual Graphs Section -->
+      <h3 class="section-title">Detailed Graphical Analysis</h3>
+      {% for key, graph_html in graphs.items() %}
+        {% set display_key = key %}
+        {% if key == "Below 20" %}
+          {% set display_key = "Instances below 20V" %}
+        {% elif key == "Trendlines" %}
+          {% set display_key = "Voltage Trendlines" %}
+        {% endif %}
+        <div class="plot-container">
+          <h4>{{ display_key }} Analysis</h4>
+          <div id="{{ key|replace(' ', '_') }}-plot">
+            {{ graph_html | safe }}
+          </div>
+          <button class="btn" onclick="downloadDetailedPlot('{{ key|replace(' ', '_') }}-plot', '{{ display_key }}')">
+            <i class="fas fa-image"></i> Download {{ display_key }} Plot as PNG
+          </button>
+        </div>
+      {% endfor %}
+
+      <!-- Detailed Tables Section -->
+      <div class="detailed-tables">
+        <h2 class="section-title">Detailed Voltage Analysis</h2>
+
+        <!-- Voltage Peaks -->
+        <h3 class="section-title">Voltage Peaks</h3>
+        <div class="table-responsive">
+          {{ detailed_tables.peaks|safe }}
+        </div>
+        <a href="{{ url_for('download_file', filename=table_csvs['peaks']) }}" class="btn" download>
+          <i class="fas fa-download"></i> Download Peaks CSV
+        </a>
+
+        <!-- Voltage Troughs -->
+        <h3 class="section-title">Voltage Troughs</h3>
+        <div class="table-responsive">
+          {{ detailed_tables.troughs|safe }}
+        </div>
+        <a href="{{ url_for('download_file', filename=table_csvs['troughs']) }}" class="btn" download>
+          <i class="fas fa-download"></i> Download Troughs CSV
+        </a>
+
+        <!-- Instances below 20V -->
+        <h3 class="section-title">Instances below 20V</h3>
+        <div class="table-responsive">
+          {{ detailed_tables.below_20|safe }}
+        </div>
+        <a href="{{ url_for('download_file', filename=table_csvs['below_20']) }}" class="btn" download>
+          <i class="fas fa-download"></i> Download Below 20 CSV
+        </a>
+
+        <!-- Accelerating Downward Slopes -->
+        <h3 class="section-title">Accelerating Downward Slopes</h3>
+        <div class="table-responsive">
+          {{ detailed_tables.downward|safe }}
+        </div>
+        <a href="{{ url_for('download_file', filename=table_csvs['downward']) }}" class="btn" download>
+          <i class="fas fa-download"></i> Download Downward Acceleration CSV
+        </a>
+      </div>
+
+      <a href="/" class="btn btn-back">
+        <i class="fas fa-arrow-left"></i> Back to Upload
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 NueGo Voltage Analysis</p>
+    <p>Dharmanshu Singh</p>
+  </footer>
+
+  <script>
+    // Render the main Plotly plot using the JSON data passed from Flask.
+    var plotJSON = {{ main_plot|safe }};
+    Plotly.newPlot("main-plot", plotJSON.data, plotJSON.layout, {responsive: true});
+
+    // Function to download the main plot as a PNG image.
+    function downloadMainPlotPNG() {
+      Plotly.downloadImage(document.getElementById("main-plot"), {
+        format: "png",
+        filename: "voltage_analysis_main_plot"
+      });
+    }
+
+    // Function to download detailed plots as PNG images.
+    function downloadDetailedPlot(plotId, filename) {
+      Plotly.downloadImage(document.getElementById(plotId), {
+        format: 'png',
+        filename: filename.replace(/\s+/g, '_') + '_plot'
+      });
+    }
+
+    // Responsive table enhancements (if needed)
+    document.addEventListener('DOMContentLoaded', function() {
+      const tables = document.querySelectorAll('table');
+      tables.forEach(table => {
+        if (
+          !table.parentElement.classList.contains('table-responsive') && 
+          !table.parentElement.classList.contains('summary-table-container')
+        ) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'table-responsive';
+          wrapper.style.overflowX = 'auto';
+          table.parentNode.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

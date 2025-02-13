@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NueGo Voltage Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --light-bg: #f3f4f6;
+            --dark-text: #1f2937;
+            --gray-text: #6b7280;
+            --white: #ffffff;
+            --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0NDAgOTAwIiBmaWxsPSJub25lIj48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xIDAuNUg2MDBMNDAwIDI1MEgxQzEgMjUwIDEgMC41IDEgMC41WiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTQ0MSA5MDBINDAwTDg1MCA2NTBIMTQ0MUMxNDQxIDY1MCAxNDQxIDkwMCAxNDQxIDkwMFoiIGZpbGw9IndoaXRlIi8+PC9nPjwvc3ZnPg==') no-repeat;
+            background-size: cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .upload-section {
+            padding: 3rem 2rem;
+            margin: 3rem auto;
+            text-align: center;
+            max-width: 800px;
+        }
+        
+        .upload-icon {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(37, 99, 235, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+        }
+        
+        .upload-icon i {
+            font-size: 3rem;
+            color: var(--primary-color);
+        }
+        
+        .upload-section h2 {
+            font-size: 1.8rem;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin: 1.5rem 0;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 6px 10px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(37, 99, 235, 0.15);
+        }
+        
+        #file-name {
+            margin: 1rem 0;
+            font-size: 15px;
+            color: var(--gray-text);
+            transition: all 0.3s ease;
+        }
+        
+        .instructions {
+            padding: 2.5rem;
+            margin: 3rem auto;
+            max-width: 800px;
+        }
+        
+        .instructions h2 {
+            color: var(--dark-text);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions h2 i {
+            color: var(--primary-color);
+        }
+        
+        .instructions ol {
+            padding-left: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .instructions li {
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+        }
+        
+        .instructions strong {
+            color: var(--primary-color);
+        }
+        
+        .flash-messages {
+            margin: 2rem 0;
+        }
+        
+        .flash-message {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .flash-message i {
+            font-size: 1.25rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--gray-text);
+            font-size: 14px;
+        }
+        
+        .step-list {
+            counter-reset: steps;
+        }
+        
+        .step-list li {
+            counter-increment: steps;
+            position: relative;
+        }
+        
+        .step-list li::before {
+            content: counter(steps);
+            background-color: var(--primary-color);
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            position: absolute;
+            left: -2.5rem;
+            top: 0.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 3rem 1rem;
+                border-radius: 0 0 30px 30px;
+            }
+            
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .upload-section, .instructions {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-bolt"></i> NueGo Voltage Analysis</h1>
+        <p>Upload your voltage data to generate comprehensive analysis and visualizations</p>
+    </header>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+            <div class="flash-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        
+        <div class="card upload-section">
+            <div class="upload-icon">
+                <i class="fas fa-file-upload"></i>
+            </div>
+            <h2>Upload Your CSV File</h2>
+            <p>Select and upload your voltage data file for analysis</p>
+            <form method="post" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <button type="button" class="btn btn-secondary">
+                        <i class="fas fa-file-csv"></i> Select CSV File
+                    </button>
+                    <input type="file" name="file" accept=".csv">
+                </div>
+                <p id="file-name">No file selected</p>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-chart-line"></i> Analyze Data
+                </button>
+            </form>
+        </div>
+        
+        <div class="card instructions">
+            <h2><i class="fas fa-lightbulb"></i> How to Use</h2>
+            <p>Follow these simple steps to analyze your fleet's voltage data:</p>
+            <ol class="step-list">
+                <li>Prepare a CSV file with columns: <strong>Timestamp</strong> (format: DD-MM-YYYY HH:MM:SS) and <strong>Values</strong> (voltage readings)</li>
+                <li>Click on "Select CSV File" to choose your data file from your computer</li>
+                <li>Verify that the correct file is selected - you'll see the filename below the button</li>
+                <li>Click "Analyze Data" to upload and process your voltage readings</li>
+                <li>View the comprehensive analysis with interactive visualizations and insights</li>
+            </ol>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 NueGo Voltage Visualization | <i class="fas fa-shield-alt"></i> Dharmanshu Singh</p>
+    </footer>
+    
+    <script>
+        document.querySelector('input[type=file]').addEventListener('change', function(e) {
+            const fileNameElement = document.getElementById('file-name');
+            if (e.target.files[0]) {
+                const fileName = e.target.files[0].name;
+                fileNameElement.textContent = fileName;
+                fileNameElement.style.color = '#2563eb';
+                fileNameElement.innerHTML = `<i class="fas fa-check-circle"></i> ${fileName}`;
+            } else {
+                fileNameElement.textContent = 'No file selected';
+                fileNameElement.style.color = '#6b7280';
+            }
+        });
+        
+        // For demonstration - can be removed in production
+        const btnSecondary = document.querySelector('.btn-secondary');
+        btnSecondary.addEventListener('click', () => {
+            document.querySelector('input[type=file]').click();
+        });
+    </script>
+</body>
+</html>
