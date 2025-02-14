@@ -20,11 +20,11 @@ The first task involved creating visualizations and analyzing voltage data using
 ![Google Sheets Graph](https://github.com/dharmanshu1921/Greencell_task/blob/main/Greencell_ExcelTask(sheets).png)
 
 ### Data Interpretation
-1. The voltage data shows significant fluctuations over time, with clear peaks and troughs in the readings.
-2. There's a general downward trend in voltage levels as indicated by the trendline.
-3. The voltage readings frequently oscillate between high and low values, suggesting regular charging and discharging cycles.
-4. Several instances show voltage dropping below critical thresholds, which could indicate battery performance issues.
-5. The pattern suggests systematic voltage behavior with predictable peaks during charging periods.
+1. The original (blue) line shows a clear oscillatory pattern in the voltage data over time, indicating periodic peaks and troughs.  
+2. The red line (1000-value moving average) smooths out much of the short-term fluctuations, but still generally follows the same cyclical shape.  
+3. The green line (5000-value moving average) is even smoother, showing a broader trend that further filters out short-term variability.  
+4. This suggests that while the system experiences regular, relatively rapid swings in voltage, the overall longer-term behavior can be captured by applying larger averaging windows.  
+5. Interpreting the data in this way helps to separate the high-frequency noise from the underlying trends, which can be crucial for understanding and predicting the system’s performance over time.  
 
 ### Demo
 [![Excel Task Demo](https://img.youtube.com/vi/lhN98-gE8PA/0.jpg)](https://youtu.be/lhN98-gE8PA)
